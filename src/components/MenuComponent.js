@@ -1,7 +1,7 @@
 /* eslint-disable no-useless-constructor */
 import React, { Component } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import DishDetail from '../dishdetail';    
+import DishDetail from './dishdetail';    
 import {  Card, CardImg, CardImgOverlay, CardText, CardBody,
     CardTitle } from 'reactstrap';
 

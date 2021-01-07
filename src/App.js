@@ -1,8 +1,9 @@
 /* eslint-disable no-unused-vars */
 import logo from './logo.svg';
 import React, { Component } from 'react';
-import { Navbar, NavbarBrand } from 'reactstrap';
 import Menu from './components/MenuComponent';
+import HeaderComponent from './components/HeaderComponent';
+import FooterComponent from './components/FooterComponent';
 import './App.css';
 import { DISHES } from './shared/dishes';
 import { render } from 'react-dom';
@@ -19,12 +20,9 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <Navbar dark color="primary">
-          <div className="container">
-            <NavbarBrand href="/"> Ristorante Con Fusion</NavbarBrand>
-          </div>
-        </Navbar>
+        <HeaderComponent />
         <Menu dishes = {this.state.dishes}/>
+        <FooterComponent />
       </div>
     );
   }

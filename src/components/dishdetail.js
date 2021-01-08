@@ -1,12 +1,11 @@
-import React, { Component } from 'react';
+import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Card, CardImg, CardImgOverlay, CardText, CardBody,
+import { Card, CardImg, CardText, CardBody,
     CardTitle } from 'reactstrap';  
 
-class DishDetail extends Component {
 
+function RenderDish({dish}) {
 
-    renderDish(dish) {
         if (dish!=null) {
             return (
                 <Card>
@@ -25,48 +24,53 @@ class DishDetail extends Component {
         }
     }
 
-    renderComments(play) {
+function RenderComments({comments}) {
 
-        if (play!=null) {
 
-            let data = play.comments.map((user) => {
-                
-                return (
-                    <ul key={user.id} className="list-unstyled ">
-                        <li> {user.comment} </li> <br />
-                        <li> {"-- " + user.author + " " + new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit'}).format(new Date(Date.parse(user.date)))} </li> <br />
-                    </ul>
-                )
-            });
-            return data;
-        }
-        else {
-            return (
-                <div></div>
-            )
-        }
+    let data = comments.map((user) => {
+        
+        return (
+            <ul key={user.id} className="list-unstyled ">
+                <li> {user.comment} </li> <br />
+                <li> {"-- " + user.author + " " + new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit'}).format(new Date(Date.parse(user.date)))} </li> <br />
+            </ul>
+        )
+    });
+
+    return data;
+     
     }
 
 
-    render() {
+    const DishDetail = (props) => {
+    
+        if (props.dish != null) {
 
-        const comment = this.renderComments(this.props.play);
+            return (
 
-       return (
-            <div className = "container">
+                <div className = "container">
                 <div className="row">
                     <div className="col-12 col-md-5 m-1">
-                        {this.renderDish(this.props.play)}
+                        <RenderDish dish = {props.dish} />
                     </div>
                     <div className="col-12 col-md-5 m-1 text-left">
                         <h4>Comments</h4>
-                        {comment}   
+                        <RenderComments comments = {props.dish.comments} />   
                     </div>
                 </div>    
             </div>
-       )
+    
+            );
+        }
+
+        else {
+            return (
+                <div></div>
+            );
+        }
+    
+    } 
         
-    };
-};
+
 
 export default DishDetail;

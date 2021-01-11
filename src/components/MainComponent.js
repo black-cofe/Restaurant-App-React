@@ -5,7 +5,7 @@ import Home from './HomeComponent';
 import Menu from './MenuComponent';
 import Contact from './ContactComponent';
 import About from './AboutComponent';
-import DishDetail from './dishdetail';
+import DishDetail from './DishdetailComponent';
 
 // import DishDetail from './dishdetail';    
 import { Route, Switch, Redirect, withRouter } from 'react-router-dom';

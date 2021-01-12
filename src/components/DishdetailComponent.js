@@ -13,101 +13,6 @@ const minLength = (len) => (val) => val && (val.length >= len);
 // const validEmail = (val) => /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(val);
 // const isNumber = (val) => !isNaN(Number(val));
 
-class CommentForm extends Component {
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            isModalOpen : false
-        }
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.toggleModal = this.toggleModal.bind(this);
-    }
-
-    toggleModal() {
-        this.setState({
-          isModalOpen: !this.state.isModalOpen
-        });
-      }
-      
-    handleSubmit(values) {
-
-        console.log('Current State is: ' + JSON.stringify(values)); 
-        alert('Current State is: ' + JSON.stringify(values));
-    }
-
-
-    render() {
-        return (
-
-            <Button outline color="primary" onClick={this.toggleModal}>
-                <span className="fa fa-pencil fa-lg"> </span>  Submit Comment
-                <Modal isOpen={this.state.isModalOpen} toggle={this.toggleModal}>
-                    <ModalHeader toggle={this.toggleModal}>
-                        Submit Comment
-                    </ModalHeader>
-                    <ModalBody>
-                        <LocalForm onSubmit={(values) => this.handleSubmit(values)}>                        
-                            <Row className="form-group">              
-                                <Label htmlFor="ratings" md={10}> Rating </Label>
-                                <Col md={10}>
-                                    <Control.select model=".contactType" id= "ratings"name="contactType"
-                                        className="form-control">
-                                        <option>1</option>
-                                        <option>2</option>
-                                        <option>3</option>
-                                        <option>4</option>
-                                        <option>5</option>
-                                    </Control.select>
-                                </Col>
-                            </Row>
-                            <Row className="form-group">
-
-                                <Label htmlFor="firstname" md={10}>Your Name</Label>                              
-                                <Col md={10}>
-                                    <Control.text model=".firstname" id="firstname" name="firstname"
-                                        placeholder="Your Name"
-                                        className="form-control"
-                                        validators={{
-                                            required, minLength: minLength(3), maxLength: maxLength(15)
-                                        }}
-                                            />
-                                    <Errors
-                                        className="text-danger"
-                                        model=".firstname"
-                                        show="touched"
-                                        messages={{
-                                            required: 'Required',
-                                            minLength: 'Must be greater than 2 characters',
-                                            maxLength: 'Must be 15 characters or less'
-                                        }}
-                                        />
-                                </Col>
-                            </Row>
-                            <Row className="form-group">
-                                <Label htmlFor="message" md={10}> Comment </Label>
-                                <Col md={10}>
-                                    <Control.textarea model=".message" id="message" name="message"
-                                        rows="6"
-                                        className="form-control" />
-                                </Col>
-                            </Row>
-                            <Row className="form-group">
-                                <Col md={{size:10, offset: 2}}>
-                                    <Button type="submit" color="primary" onClick={this.toggleModal}>
-                                        Submit
-                                    </Button>
-                                </Col>
-                            </Row>
-                        </LocalForm>    
-                    </ModalBody>
-            </Modal>
-            </Button>
-        );
-    }
-
-}
-
 function RenderDish({dish}) {
 
     if (dish!=null) {
@@ -130,29 +35,123 @@ function RenderDish({dish}) {
 
 
 
-function RenderComments({comments}) {
+function RenderComments({comments, addComment, dishId}) {
 
+     return (
 
-    const data = comments.map((user) => {
-        
-        return (
-            <ul key={user.id} className="list-unstyled ">
-                <li> {user.comment} </li> <br />
-                <li> {"-- " + user.author + " " + new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit'}).format(new Date(Date.parse(user.date)))} </li> 
-            </ul>
-        )
-    });
-
-    return (
-        
         <div className="text-left">
-            <h4> Comments </h4>
-            {data}
-            <CommentForm />
+        <h4> Comments </h4>
+        {comments.map((comment) => {
+            return (
+            <ul key={comment.id} className="list-unstyled ">
+                <li> {comment.comment} </li> <br />
+                <li> {"-- " + comment.author + " " + new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit'}).format(new Date(Date.parse(comment.date)))} </li> 
+            </ul>
+            )
+        })}
+        <CommentForm dishId={dishId} addComment={addComment}/>
         </div>
-    );
- 
+    )   
 }
+
+
+class CommentForm extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            isModalOpen : false
+        }
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.toggleModal = this.toggleModal.bind(this);
+    }
+
+    toggleModal() {
+        this.setState({
+          isModalOpen: !this.state.isModalOpen
+        });
+      }
+      
+    handleSubmit(values) {
+        // this.toggleModal();
+        this.props.addComment(this.props.dishId, values.rating, values.author, values.comment);
+    }
+
+
+    render() {
+        return (
+
+            <Button outline color="primary" onClick={this.toggleModal}>
+                <span className="fa fa-pencil fa-lg"> </span>  Submit Comment
+                <Modal isOpen={this.state.isModalOpen} toggle={this.toggleModal}>
+                    <ModalHeader toggle={this.toggleModal}>
+                        Submit Comment
+                    </ModalHeader>
+                    <ModalBody>
+                        <LocalForm onSubmit={(values) => this.handleSubmit(values)}>                        
+                            <Row className="form-group">              
+                                <Label htmlFor="rating" md={10}> Rating </Label>
+                                <Col md={10}>
+                                    <Control.select model=".rating" id= "rating" name="rating"
+                                        className="form-control">
+                                        <option>1</option>
+                                        <option>2</option>
+                                        <option>3</option>
+                                        <option>4</option>
+                                        <option>5</option>
+                                    </Control.select>
+                                </Col>
+                            </Row>
+                            <Row className="form-group">
+
+                                <Label htmlFor="author" md={10}>Your Name</Label>                              
+                                <Col md={10}>
+                                    <Control.text model=".author" id="author" name="author"
+                                        placeholder="Your Name"
+                                        className="form-control"
+                                        validators={{
+                                            required, minLength: minLength(3), maxLength: maxLength(15)
+                                        }}
+                                            />
+                                    <Errors
+                                        className="text-danger"
+                                        model=".author"
+                                        show="touched"
+                                        messages={{
+                                            required: 'Required',
+                                            minLength: 'Must be greater than 2 characters',
+                                            maxLength: 'Must be 15 characters or less'
+                                        }}
+                                        />
+                                </Col>
+                            </Row>
+                            <Row className="form-group">
+                                <Label htmlFor="comment" md={10}> Comment </Label>
+                                <Col md={10}>
+                                    <Control.textarea model=".comment" id="comment" name="comment"
+                                        rows="6"
+                                        className="form-control" />
+                                </Col>
+                            </Row>
+                            <Row className="form-group">
+                                <Col md={{size:10, offset: 2}}>
+                                    <Button type="submit" color="primary" onClick={this.toggleModal}>
+                                        Submit
+                                    </Button>
+                                </Col>
+                            </Row>
+                        </LocalForm>    
+                    </ModalBody>
+            </Modal>
+            </Button>
+        );
+    }
+
+}
+
+
+ 
+
 
 
 const DishDetail = (props) => {
@@ -178,7 +177,9 @@ const DishDetail = (props) => {
                     <RenderDish dish={props.dish} />
                 </div>
                 <div className="col-12 col-md-5 m-1">
-                    <RenderComments comments={props.comments} />
+                    <RenderComments comments={props.comments} 
+                        addComment={props.addComment}
+                        dishId={props.dish.id}/>
                 </div>
             </div>
             </div>

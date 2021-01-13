@@ -1,37 +1,40 @@
 import React from 'react';
 import { Breadcrumb, BreadcrumbItem, Card, CardBody, CardHeader, Media } from 'reactstrap';
 import { Link } from 'react-router-dom';
+import { FadeTransform, Fade, Stagger } from 'react-animation-components';
 
 
 const RenderLeader = ({leader}) => {
     
     return (
 
-        <Media>
-            <Media left middle className="ml-2 mr-4">
-                <Media object src="assets/images/alberto.png" alt="Generic placeholder image" />
-            </Media>
-            <Media body className="text-left">
-                <Media heading>
-                    {leader.name}
+            <Media>
+                <Media left middle className="ml-2 mr-4">
+                    <Media object src="assets/images/alberto.png" alt="Generic placeholder image" />
                 </Media>
-                <p>{leader.designation}<br /><br/>
-                {leader.description} </p>
+                    <Media body className="text-left">
+                        <Media heading>
+                            {leader.name}
+                        </Media>
+                        <p>{leader.designation}<br /><br/>
+                        {leader.description} </p>
+                    </Media>
             </Media>
-        </Media>
     );
 }
 
 function About(props) {
 
     const leaders = props.leaders.map((leader) => {
+            
         return (
-            <Media list>
-                <RenderLeader leader= {leader} /> 
-            </Media>
-        );
-    });
-
+                    <Media list>
+                        <Fade in>
+                            <RenderLeader leader= {leader} /> 
+                        </Fade>
+                    </Media>
+            );
+        });
 
     return(
         <div className="container">
@@ -87,9 +90,11 @@ function About(props) {
                 <div className="col-12">
                     <h2>Corporate Leadership</h2>
                 </div>
-                <div className="col-12">
-                    {leaders}
-                </div>
+                <Stagger in>
+                    <div className="col-12">
+                        {leaders}
+                    </div>
+                </Stagger>
             </div>
         </div>
     );

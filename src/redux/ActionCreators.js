@@ -39,7 +39,7 @@ export const postComment = (dishId, rating, author, comment) => (dispatch) => {
             throw error;
       })
     .then(response => response.json())
-    .then(response => dispatch(addComment(response)))
+    .then(comment => dispatch(addComment(comment)))
     .catch(error =>  { console.log('post comments', error.message); alert('Your comment could not be posted\nError: '+error.message); });
 };
 
@@ -151,3 +151,80 @@ export const addPromos = (promos) => ({
     type: ActionTypes.ADD_PROMOS,
     payload: promos
 });
+
+
+export const leadersLoading = () => ({
+  type: ActionTypes.LEADERS_LOADING
+});
+
+export const leadersFailed = (errmess) => ({
+  type: ActionTypes.LEADERS_FAILED,
+  payload: errmess
+});
+
+export const addLeaders = (leaders) => ({
+  type: ActionTypes.ADD_LEADERS,
+  payload: leaders
+});
+
+export const fetchLeaders = () => (dispatch) => {
+    
+  dispatch(leadersLoading());
+
+  return fetch(baseUrl + 'leaders')
+  .then(response => {
+      if (response.ok) {
+        return response;
+      } else {
+        var error = new Error('Error ' + response.status + ': ' + response.statusText);
+        error.response = response;
+        throw error;
+      }
+    },
+    error => {
+          var errmess = new Error(error.message);
+          throw errmess;
+    })
+  .then(response => response.json())
+  .then(leaders => dispatch(addLeaders(leaders)))
+  .catch(error => dispatch(leadersFailed(error.message)));
+
+}
+
+export const postFeedback = (Feedback) => (dispatch) => {
+
+  const newFeedback = {
+    firstname: Feedback.firstname,
+    lastname: Feedback.lastname,
+    telnum: Feedback.telnum,
+    email: Feedback.email,
+    agree: Feedback.agree,
+    contactType: Feedback.contactType,
+    message: Feedback.message
+  };
+  newFeedback.date = new Date().toISOString();
+
+  return fetch(baseUrl + 'feedback', {
+      method: "POST",
+      body: JSON.stringify(newFeedback),
+      headers: {
+        "Content-Type": "application/json"
+      },
+      credentials: "same-origin"
+  })
+  .then(response => {
+      if (response.ok) {
+        return response;
+      } else {
+        var error = new Error('Error ' + response.status + ': ' + response.statusText);
+        error.response = response;
+        throw error;
+      }
+    },
+    error => {
+          throw error;
+    })
+  .then(response => response.json())
+  .then((response) => alert(JSON.stringify(response)))
+  .catch(error =>  { console.log('Post Feedback', error.message); alert('Your Feedback could not be submitted: '+error.message); });
+};

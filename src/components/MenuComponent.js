@@ -5,6 +5,7 @@ import {  Card, CardImg, CardImgOverlay,
     CardTitle, Breadcrumb, BreadcrumbItem } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { Loading } from './LoadingComponent';
+import { baseUrl } from '../shared/baseUrl';
 
 
 // instead of props in RenderMenuItem(props) we just use JS properties as the parameter that are gonna come in as part of the JS object props 
@@ -13,7 +14,7 @@ import { Loading } from './LoadingComponent';
         return (
             <Card >
                 <Link to={`/menu/${dish.id}`}> 
-                    <CardImg width="100%" src={dish.image} alt={dish.name} />
+                    <CardImg width="100%" src={baseUrl + dish.image} alt={dish.name} />
                     <CardImgOverlay>
                         <CardTitle>{dish.name}</CardTitle>
                     </CardImgOverlay>

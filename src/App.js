@@ -1,30 +1,28 @@
-/* eslint-disable no-unused-vars */
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import React, { Component } from 'react';
-import Menu from './components/MenuComponent';
-import HeaderComponent from './components/HeaderComponent';
-import FooterComponent from './components/FooterComponent';
+import Main from './components/MainComponent';
+// import Menu from './components/MenuComponent';
 import './App.css';
-import { DISHES } from './shared/dishes';
-import { render } from 'react-dom';
+// import { DISHES } from './shared/dishes';
+// import { render } from 'react-dom';
+import { BrowserRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { ConfigureStore } from './redux/configureStore';
+
+const store = ConfigureStore();
 
 class App extends Component {
 
-  constructor(props){
-    super(props);
-    this.state = {
-      dishes : DISHES
-    };
-  }
-
   render() {
     return (
-      <div className="App">
-        <HeaderComponent />
-        <Menu dishes = {this.state.dishes}/>
-        <FooterComponent />
-      </div>
-    );
+      <Provider store={store}>
+        <BrowserRouter>
+          <div className="App">
+            <Main />
+          </div>
+        </BrowserRouter>
+      </Provider>
+    );  
   }
 
 }
